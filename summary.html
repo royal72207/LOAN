@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demande de Prêt - Étape 3</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --blue: #6077d9;
+    --red: #e52332;
+    --text: #252525;
+    --muted: #858585;
+    --border: #d5d5d5;
+}
+
+body {
+    margin: 0;
+    background: #ededed;
+    color: var(--text);
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+/* HEADER */
+.site-header {
+    min-height: 130px;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    background: #f8f8f8;
+    box-shadow: 0 3px 7px #00000015;
+    z-index: 5;
+}
+
+.back-link {
+    color: #333;
+    text-decoration: none;
+    font-size: 25px;
+    white-space: nowrap;
+}
+
+.airtel-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--red);
+}
+
+.airtel-logo {
+    font-family: Arial, sans-serif;
+    font-size: 43px;
+    font-weight: bold;
+    letter-spacing: -2px;
+}
+
+.airtel-brand span {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.menu-button {
+    width: 50px;
+    min-height: 48px;
+    padding: 7px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 7px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-button span {
+    display: block;
+    height: 5px;
+    width: 100%;
+    background: #333;
+    border-radius: 5px;
+}
+
+.menu-panel {
+    display: none;
+    padding: 20px 28px;
+    background: white;
+    box-shadow: 0 4px 8px #00000012;
+}
+
+.menu-panel.open {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.menu-panel a {
+    color: #333;
+    text-decoration: none;
+    font-size: 19px;
+}
+
+/* APPLICATION CARD */
+.application-card {
+    width: calc(100% - 64px);
+    max-width: 900px;
+    margin: 64px auto;
+    padding: 54px 40px 64px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 8px 18px #00000012;
+}
+
+.application-heading {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.application-heading h1 {
+    font-size: 38px;
+    font-weight: normal;
+    margin: 0 0 12px;
+}
+
+.application-heading p {
+    color: #888;
+    font-size: 25px;
+    margin: 0;
+}
+
+/* PROGRESS */
+.progress {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 0 auto 72px;
+}
+
+.progress span {
+    display: block;
+    height: 8px;
+    width: 120px;
+    max-width: 27%;
+    background: var(--blue);
+    border-radius: 20px;
+}
+
+/* FORM */
+.field {
+    margin-bottom: 42px;
+}
+
+label {
+    display: block;
+    margin-bottom: 18px;
+    font-size: 24px;
+}
+
+input,
+select {
+    display: block;
+    width: 100%;
+    min-height: 88px;
+    padding: 18px 28px;
+    border: 1.5px solid var(--border);
+    border-radius: 13px;
+    background: white;
+    color: #292929;
+    font-family: inherit;
+    font-size: 23px;
+    outline: none;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px #6077d920;
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+/* LOAN SUMMARY */
+.summary {
+    margin-top: 48px;
+    padding: 42px 40px;
+    background: #f7f8fa;
+    border-radius: 17px;
+}
+
+.summary h2 {
+    margin: 0 0 30px;
+    font-size: 30px;
+    font-weight: normal;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 21px 0;
+    border-bottom: 1px solid #dedede;
+    font-size: 21px;
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+.key {
+    color: #777;
+    flex: 0 1 45%;
+}
+
+.value {
+    flex: 1;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+/* BUTTONS */
+.buttons {
+    display: grid;
+    gap: 30px;
+    margin-top: 64px;
+}
+
+button.action {
+    width: 100%;
+    min-height: 96px;
+    padding: 20px;
+    border: none;
+    border-radius: 16px;
+    font-family: inherit;
+    font-size: 25px;
+    cursor: pointer;
+    transition: opacity .2s, transform .2s;
+}
+
+button.action:hover {
+    opacity: .9;
+}
+
+button.action:active {
+    transform: scale(.99);
+}
+
+.previous {
+    color: #555;
+    background: #e7e7e7;
+}
+
+.submit {
+    color: white;
+    background: linear-gradient(110deg, #6097f5, #69b0f5);
+}
+
+/* MESSAGES */
+.notice {
+    display: none;
+    padding: 16px;
+    margin-top: 20px;
+    border-radius: 10px;
+    background: #eef5ff;
+    color: #254c85;
+    line-height: 1.5;
+}
+
+/* FOOTER */
+footer {
+    padding: 28px 15px;
+    text-align: center;
+    color: #999;
+    font-size: 20px;
+    line-height: 1.6;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+    .site-header {
+        min-height: 130px;
+        padding: 18px 24px;
+    }
+
+    .back-link {
+        font-size: 21px;
+    }
+
+    .airtel-logo {
+        font-size: 36px;
+    }
+
+    .airtel-brand span {
+        font-size: 10px;
+    }
+
+    .menu-button {
+        width: 43px;
+    }
+
+    .application-card {
+        width: calc(100% - 32px);
+        margin: 36px auto;
+        padding: 40px 24px 42px;
+        border-radius: 22px;
+    }
+
+    .application-heading {
+        margin-bottom: 54px;
+    }
+
+    .application-heading h1 {
+        font-size: 34px;
+    }
+
+    .application-heading p {
+        font-size: 23px;
+    }
+
+    .progress {
+        margin-bottom: 55px;
+        gap: 12px;
+    }
+
+    .progress span {
+        height: 7px;
+    }
+
+    .field {
+        margin-bottom: 36px;
+    }
+
+    label {
+        font-size: 21px;
+        margin-bottom: 15px;
+    }
+
+    input,
+    select {
+        min-height: 76px;
+        padding: 16px 20px;
+        font-size: 20px;
+    }
+
+    .summary {
+        margin-top: 46px;
+        padding: 30px 24px;
+    }
+
+    .summary h2 {
+        font-size: 27px;
+        margin-bottom: 24px;
+    }
+
+    .summary-row {
+        gap: 12px;
+        padding: 19px 0;
+        font-size: 19px;
+    }
+
+    .key {
+        flex-basis: 43%;
+    }
+
+    .buttons {
+        gap: 24px;
+        margin-top: 52px;
+    }
+
+    button.action {
+        min-height: 82px;
+        font-size: 23px;
+    }
+
+    footer {
+        font-size: 17px;
+    }
+}
+
+@media (max-width: 360px) {
+    .site-header {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .back-link {
+        font-size: 18px;
+    }
+
+    .airtel-logo {
+        font-size: 30px;
+    }
+
+    .airtel-brand span {
+        font-size: 8px;
+    }
+
+    .menu-button {
+        width: 35px;
+    }
+
+    .application-card {
+        width: calc(100% - 20px);
+        padding-left: 17px;
+        padding-right: 17px;
+    }
+
+    .summary {
+        padding: 25px 17px;
+    }
+
+    .summary-row {
+        font-size: 16px;
+        gap: 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+
+    <a href="javascript:history.back()" class="back-link">
+        ← Retour
+    </a>
+
+    <div class="airtel-brand">
+        <div class="airtel-logo">◕ airtel</div>
+        <span>A REASON TO IMAGINE</span>
+    </div>
+
+    <button
+        class="menu-button"
+        id="menuButton"
+        type="button"
+        aria-label="Ouvrir le menu"
+        aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+</header>
+
+<nav class="menu-panel" id="menuPanel">
+    <a href="index.php">Accueil</a>
+    <a href="index.php?page=plans">Nos offres</a>
+</nav>
+
+<!-- MAIN APPLICATION -->
+<main class="application-card">
+
+    <div class="application-heading">
+        <h1>Demande de Prêt</h1>
+        <p>Étape 3 sur 3</p>
+    </div>
+
+    <div class="progress" aria-label="Étape 3 sur 3">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <form id="applicationForm">
+
+        <div class="field">
+            <label for="employment">Statut d'Emploi</label>
+
+            <select id="employment" name="employment" required>
+                <option value="Employé">Employé</option>
+                <option value="Indépendant">Indépendant</option>
+                <option value="Sans emploi">Sans emploi</option>
+                <option value="Étudiant">Étudiant</option>
+                <option value="Retraité">Retraité</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="income">Revenu Annuel (USD)</label>
+
+            <input
+                type="number"
+                id="income"
+                name="income"
+                min="0"
+                step="1"
+                placeholder="50,000"
+                required>
+        </div>
+
+        <section class="summary">
+            <h2>Résumé de la Demande</h2>
+
+            <div class="summary-row">
+                <span class="key">Type de Prêt:</span>
+                <span class="value" id="loanType">Prêt Personnel</span>
+            </div>
+
+            <div class="summary-row">
+                <span class="key">Montant du Prêt:</span>
+                <span class="value" id="loanAmount">$2,500</span>
+            </div>
+
+            <div class="summary-row">
+                <span class="key">Durée du Prêt:</span>
+                <span class="value" id="loanDuration">12 Mois</span>
+            </div>
+
+            <div class="summary-row">
+                <span class="key">Objet:</span>
+                <span class="value" id="loanPurpose">Non renseigné</span>
+            </div>
+
+            <div class="summary-row">
+                <span class="key">Montant souhaité (CDF):</span>
+                <span class="value" id="royalAmount">Non renseigné</span>
+            </div>
+
+            <div class="summary-row">
+                <span class="key">Objet du prêt:</span>
+                <span class="value" id="royalPurpose">Non renseigné</span>
+            </div>
+
+            <div class="summary-row">
+                <span class="key">Demandeur:</span>
+                <span class="value" id="applicantName">Non renseigné</span>
+            </div>
+
+            <div class="summary-row">
+                <span class="key">Email:</span>
+                <span class="value" id="applicantEmail">Non renseigné</span>
+            </div>
+
+            <div class="summary-row">
+                <span class="key">Téléphone:</span>
+                <span class="value" id="applicantPhone">Non renseigné</span>
+            </div>
+        </section>
+
+        <div id="notice" class="notice" role="status"></div>
+
+        <div class="buttons">
+            <button
+                class="action previous"
+                id="previousButton"
+                type="button">
+                PRÉCÉDENT
+            </button>
+
+            <button
+                class="action submit"
+                type="button"
+                onclick="window.location.href='trial.html'">
+                SOUMETTRE
+            </button>
+        </div>
+
+    </form>
+
+</main>
+
+<footer>
+    © 2026 Airtel Congo. Tous droits réservés.
+</footer>
+
+<script>
+"use strict";
+
+// Read the application details passed in the URL.
+const params = new URLSearchParams(window.location.search);
+let application = {};
+
+try {
+    application = JSON.parse(
+        sessionStorage.getItem("loanApplication") || "{}"
+    );
+} catch {
+    application = {};
+}
+
+function getParam(name, fallback) {
+    const value = params.get(name);
+    return value && value.trim() ? value.trim() : fallback;
+}
+
+function setText(id, value) {
+    document.getElementById(id).textContent = value;
+}
+
+const amount = Number(
+    getParam("amount", application.loanAmount || "")
+);
+
+setText(
+    "loanType",
+    getParam("loanType", application.loanType || "Prêt Personnel")
+);
+
+setText(
+    "loanAmount",
+    Number.isFinite(amount) && amount > 0
+        ? "$" + amount.toLocaleString("en-US")
+        : "$2,500"
+);
+
+setText(
+    "loanDuration",
+    getParam("duration", application.loanDuration || "12") + " Mois"
+);
+
+setText(
+    "loanPurpose",
+    getParam("purpose", application.loanPurpose || "Non renseigné")
+);
+
+setText(
+    "royalAmount",
+    application.royalAmount
+        ? Number(application.royalAmount).toLocaleString("en-US") + " CDF"
+        : "Non renseigné"
+);
+
+setText(
+    "royalPurpose",
+    application.royalPurpose || "Non renseigné"
+);
+
+setText(
+    "applicantName",
+    getParam(
+        "name",
+        [application.applicantFirstName, application.applicantLastName]
+            .filter(Boolean)
+            .join(" ") || "Non renseigné"
+    )
+);
+
+setText(
+    "applicantEmail",
+    getParam("email", application.applicantEmail || "Non renseigné")
+);
+
+setText(
+    "applicantPhone",
+    getParam("phone", application.applicantPhone || "Non renseigné")
+);
+
+// Toggle the navigation menu.
+const menuButton = document.getElementById("menuButton");
+const menuPanel = document.getElementById("menuPanel");
+
+menuButton.addEventListener("click", function () {
+    const isOpen = menuPanel.classList.toggle("open");
+    menuButton.setAttribute("aria-expanded", String(isOpen));
+});
+
+// Previous step.
+document.getElementById("previousButton")
+.addEventListener("click", function () {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        window.location.href = "royal.html";
+    }
+});
+
+// Validate the form.
+document.getElementById("applicationForm")
+.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    if (!this.reportValidity()) {
+        return;
+    }
+
+    const income = Number(
+        document.getElementById("income").value
+    );
+
+    const employment =
+        document.getElementById("employment").value;
+
+    if (!Number.isFinite(income) || income < 0) {
+        showNotice("Veuillez saisir un revenu valide.");
+        return;
+    }
+
+    // Demo only: this does not send or save an application.
+    // Connect a legitimate, secure PHP backend to process submissions.
+    showNotice(
+        "Vérification terminée. Votre demande n'a pas été envoyée. " +
+        "Un serveur sécurisé doit être configuré pour traiter la demande."
+    );
+});
+
+function showNotice(message) {
+    const notice = document.getElementById("notice");
+    notice.textContent = message;
+    notice.style.display = "block";
+
+    notice.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
+}
+</script>
+
+</body>
+</html>
